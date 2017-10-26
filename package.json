@@ -4,7 +4,7 @@
   "description": "Lets you run each test in a separate context, loaded as an iframe.",
   "main": "index.js",
   "scripts": {
-    "test": "karma run"
+    "test": "karma start --single-run"
   },
   "keywords": [
     "karma-plugin",
