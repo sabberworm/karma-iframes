@@ -10,4 +10,4 @@ before_script:
   - export CHROME_BIN=chromium-browser
 env:
   - KARMA_BROWSER=Firefox
-  - KARMA_BROWSER=Chrome_travis_ci
+  - KARMA_BROWSER=Chrome
