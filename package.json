@@ -15,7 +15,7 @@
     "karma": ">=0.13"
   },
   "author": "Raphael Schweikert <any@sabberworm.com>",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "devDependencies": {
     "chai": "^4.1.2",
     "karma": "^1.7.1",
@@ -29,5 +29,17 @@
   "dependencies": {
     "minimatch": "^3.0.4",
     "tmp": "0.0.33"
-  }
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabberworm/karma-iframes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sabberworm/karma-iframes/issues"
+  },
+  "homepage": "https://github.com/sabberworm/karma-iframes#readme"
 }
