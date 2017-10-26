@@ -9,11 +9,16 @@ let PLUGINS = [
 ]
 
 if('KARMA_BROWSER' in process.env) {
-	BROWSERS.push(process.env.KARMA_BROWSER);
-	PLUGINS.push(`karma-${process.env.KARMA_BROWSER.toLowerCase()}-launcher`);
+	process.env.KARMA_BROWSER.split(/\s+,\s+/).forEach(browser => {
+		BROWSERS.push(browser);
+		PLUGINS.push(`karma-${browser.toLowerCase()}-launcher`);
+	});
 } else {
 	BROWSERS.push('Firefox', 'Chrome');
 	PLUGINS.push('karma-firefox-launcher', 'karma-chrome-launcher');
+	if(process.platform === 'darwin') {
+		BROWSERS.push('Safari');
+	}
 }
 
 module.exports = function(config) {
