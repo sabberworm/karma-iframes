@@ -6,8 +6,8 @@ node_js:
   - "8"
   - "6"
 env:
-	- "RUN_IN_PARENT=true"
-	- "RUN_IN_PARENT=false"
+  - RUN_IN_PARENT=true
+  - RUN_IN_PARENT=false
 addons:
   chrome: stable
 before_script:
