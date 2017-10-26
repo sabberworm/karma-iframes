@@ -6,7 +6,7 @@ Essentially, it will let you designate a set of files as running each in a separ
 
 This means you can pollute the global namespace all you want in one test without affecting the other (see [karma-runner/karma#412](https://github.com/karma-runner/karma/issues/412)).
 
-## Why is this useful
+## Why is this useful?
 
 Preprocessors that package a test file plus all its dependencies into a single file (think TypeScript in its `--outFile --module` mode or `karma-webpack`) can sometimes end up packaging the same dependency multiple times. This plugin won’t fix that but it will mitigate its effects. For example, if you have a file that `require`s `'jquery'` and then exports `$` to `window.$` and you include this file from multiple tests, only the one instance of jQuery that is loaded last will actually be global but it may or may not have all required jQuery plugins registered to it, depending on which entry file they were included in.
 
@@ -18,7 +18,7 @@ Sure, as always:
 
 * When focusing on a test (e.g. using Jasmine’s `fit`, or QUnit’s `only`), you’ll only be focusing on this test within the suite/file it belongs, not the whole test set. This might not be what you want.
 * Instrumentation/coverage reports most likely won’t work (or, at the least, won’t be accurate). I have not tested this.
-* Creating a new context incurs some costs, both in the karma server as well as in the client code.
+* Creating a new context incurs some costs, both in the karma server as well as in the client code. You should be able to mitigate this by setting `runInParent` to `true`, to nest the iframes only 1 level deep instead of 2.
 * The plugin messes with some karma internals and might not be compatible with all configurations/plugins.
 * For it to work, all files you want separated have to not depend on each other. You can only include each file either in all iframes or only in one. Slicing arbitrarily is not supported.
 * Currently the file under test is inlined into the iframe’s HTML. If your test code uses tokens like `</script>` or a different charset than the context, this may break. I plan to change this, however.
