@@ -20,6 +20,8 @@ Sure, as always:
 * Instrumentation/coverage reports most likely won’t work (or, at the least, won’t be accurate). I have not tested this.
 * Creating a new context incurs some costs, both in the karma server as well as in the client code.
 * The plugin messes with some karma internals and might not be compatible with all configurations/plugins.
+* For it to work, all files you want separated have to not depend on each other. You can only include each file either in all iframes or only in one. Slicing arbitrarily is not supported.
+* Currently the file under test is inlined into the iframe’s HTML. If your test code uses tokens like `</script>` or a different charset than the context, this may break. I plan to change this, however.
 
 ## How does it work?
 
