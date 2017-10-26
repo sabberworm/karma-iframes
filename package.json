@@ -26,6 +26,7 @@
     "mocha": "^4.0.1"
   },
   "dependencies": {
+    "minimatch": "^3.0.4",
     "tmp": "0.0.33"
   }
 }
