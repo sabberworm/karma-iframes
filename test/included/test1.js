@@ -2,8 +2,11 @@ window['test1-global'] = 'defined';
 
 describe('globals', () => {
 	it('should only exist from test1 file', () => {
-		expect('test1-global' in window).to.be.true
-		expect('test2-global' in window).to.be.false
+		expect(window).to.include.all.keys('test1-global');
+		expect(window).to.not.include.any.key('test2-global');
+	});
+	it('from should-be-in-every-iframe.js should exist', () => {
+		expect(window).to.include.all.keys('should-be-in-every-iframe');
 	});
 });
 

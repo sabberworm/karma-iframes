@@ -40,7 +40,8 @@ module.exports = function(config) {
 			{
 				pattern: 'test/not-included/**/*.js',
 				included: false
-			}
+			},
+			'test/included-not-transformed/**/*.js'
 		],
 
 
