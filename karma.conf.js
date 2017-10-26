@@ -18,6 +18,7 @@ if('KARMA_BROWSER' in process.env) {
 	PLUGINS.push('karma-firefox-launcher', 'karma-chrome-launcher');
 	if(process.platform === 'darwin') {
 		BROWSERS.push('Safari');
+		PLUGINS.push('karma-safari-launcher');
 	}
 }
 
