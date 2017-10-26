@@ -25,9 +25,9 @@ Sure, as always:
 
 The plugin will prevent the test files from being directly included in the test runner context. Instead it will only add one adapter that loops through all the designated files, and create an iframe for each.
 
-These iframes each load an HTML file similar to the normal karma context: it includes the normal test adapter and all ambient files but of the designated files it will only contain a single one. It will also include an additional file which I lovingly call the reverse context. This will provide the `__karma__` global that is necessary for the test adapter to notify the test results.
+These iframes each load an HTML file similar to the normal karma context: it includes the normal test adapter and all ambient files but of the designated files it will only contain a single one. It will also include an additional file which I lovingly call the “reverse context”. This will provide the `__karma__` global that is necessary for the test adapter to notify the test results.
 
-This reverse context will talk to the iframe adapter on the parent context using the postMessage API.
+This reverse context will talk to the iframe adapter on the parent context using the `postMessage` API.
 
 ## Configuration
 
@@ -51,6 +51,7 @@ Then, add it to the `plugins` section of your `karma.conf.js`:
 To use it, add it as a framework:
 
 ```javascript
+	[…]
 	frameworks: [
 		[…],
 		'iframes'
