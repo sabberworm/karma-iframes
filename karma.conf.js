@@ -1,6 +1,21 @@
 // Karma configuration
 // Generated on Wed Oct 25 2017 07:04:47 GMT+0200 (CEST)
 
+let BROWSERS = [];
+let PLUGINS = [
+	'karma-mocha',
+	'karma-chai',
+	require('./index.js')	
+]
+
+if('KARMA_BROWSER' in process.env) {
+	BROWSERS.push(process.env.KARMA_BROWSER);
+	PLUGINS.push(`karma-${process.env.KARMA_BROWSER.toLowerCase()}-launcher`);
+} else {
+	BROWSERS.push('Firefox', 'Chrome');
+	PLUGINS.push('karma-firefox-launcher', 'karma-chrome-launcher');
+}
+
 module.exports = function(config) {
   config.set({
 
@@ -56,13 +71,9 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: [],
+    browsers: BROWSERS,
 
-		plugins: [
-			'karma-mocha',
-			'karma-chai',
-			require('./index.js')
-		],
+		plugins: PLUGINS,
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
