@@ -1,7 +1,14 @@
 // Mock the __karma__ to be used inside the iframe
 // Send progress to the parent frame for iframes-adapter to send to the real __karma__ of the real context
 
-window.__karma__ = (function() {
+window.__karma__ = (function(hasParent) {
+	if(!hasParent) {
+		// Someone has opened this frame manually → inject the normal context.js
+		document.write('<script src="/context.js" type="application/javascript"></script>');
+		document.write('<script src="/debug.js" type="application/javascript"></script>');
+		return window.__karma__;
+	}
+
 	function UNIMPLEMENTED_START() {
 		throw new Error('An adapter should provide the start function');
 	}
@@ -10,7 +17,7 @@ window.__karma__ = (function() {
 		start: UNIMPLEMENTED_START,
 		setupContext
 	};
-	
+
 	function callParentKarmaMethod(methodName, args) {
 		args.unshift('iframe-test-results', methodName);
 		window.parent.postMessage(args, window.location.origin);
@@ -19,7 +26,7 @@ window.__karma__ = (function() {
 	function postToMainContext(message, arg) {
 		callParentKarmaMethod(message, [arg]);
 	}
-	
+
 	DIRECT_METHODS = ['error', 'log', 'complete', 'result'];
 	DIRECT_METHODS.forEach(method => {
 		karma[method] = function() {
@@ -72,4 +79,4 @@ window.__karma__ = (function() {
 	}
 
 	return karma;
-})();
+})(window.parent !== window);
