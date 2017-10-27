@@ -84,7 +84,7 @@
 			console.debug(`Suite ${this.fileName} has a result, ${result}`);
 		}
 		result.suite = result.suite || [];
-		result.suite.unshift(this.fileName);
+		result.suite.unshift(this.fileName.replace(/\.iframe\.html$/, ''));
 		result.id = this.fileName+'#'+(result.id || '');
 		this.finished++;
 		sendResult(result);
