@@ -87,4 +87,4 @@ of course, you can combine this with other preprocessors:
 	[…]
 ```
 
-In the list of preprocessors for a pattern, I can’t think of a single reason why you’d not wan the `'iframes'` preprocessor to be last (unless some other plugin comes along, designed specifically to extend karma-iframes).
+In the list of preprocessors for a pattern, I can’t think of a single reason why you’d not want the `'iframes'` preprocessor to be last (unless some other plugin comes along, designed specifically to extend karma-iframes).
