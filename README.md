@@ -21,7 +21,6 @@ Sure, as always:
 * Creating a new context incurs some costs, both in the karma server as well as in the client code. You should be able to mitigate this by setting `runInParent` to `true`, to nest the iframes only 1 level deep instead of 2.
 * The plugin messes with some karma internals and might not be compatible with all configurations/plugins.
 * For it to work, all files you want separated have to not depend on each other. You can only include each file either in all iframes or only in one. Slicing arbitrarily is not supported.
-* Currently the file under test is inlined into the iframe’s HTML. If your test code uses tokens like `</script>` or a different charset than the context, this may break. I plan to change this, however.
 
 ## How does it work?
 
