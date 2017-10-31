@@ -22,13 +22,16 @@ if('KARMA_BROWSER' in process.env) {
 	}
 }
 
+let runInParent = process.env['RUN_IN_PARENT'] === 'true';
+console.info(`runInParent is ${runInParent ? '' : 'in'}active.`);
+
 module.exports = function(config) {
 	config.set({
 
 		// base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: '',
 
-		runInParent: process.env['RUN_IN_PARENT'] === 'true',
+		runInParent,
 
 		// frameworks to use
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
