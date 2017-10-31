@@ -19,7 +19,7 @@
     "karma-preprocessor"
   ],
   "peerDependencies": {
-    "karma": ">=0.13"
+    "karma": ">=1.2"
   },
   "author": "Raphael Schweikert <any@sabberworm.com>",
   "license": "GPL-3.0",

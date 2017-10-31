@@ -6,8 +6,6 @@ node_js:
   - "8"
   - "6"
 env:
-  - KARMA_VERSION=1.0
-  - KARMA_VERSION=1.1
   - KARMA_VERSION=1.2
   - KARMA_VERSION=1.3
   - KARMA_VERSION=1.4
