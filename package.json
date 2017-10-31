@@ -9,7 +9,9 @@
     "lib"
   ],
   "scripts": {
-    "test": "karma start --single-run || karma start --single-run"
+    "test": "RUN_IN_PARENT=true npm run test-try-twice && RUN_IN_PARENT=false npm run test-try-twice",
+    "test-try-twice": "npm run test-run || npm run test-run",
+    "test-run": "karma start --single-run"
   },
   "keywords": [
     "karma-plugin",
