@@ -8,6 +8,11 @@
 
 * Serve resolved files correctly on windows, thanks to [@Aquariuslt](https://github.com/Aquariuslt).
 
+## 1.1.2
+
+* Easier debugging of individual suites, even after reload.
+* Allow query params after requests to iframe or its script.
+
 # 1.0
 
 ## 1.0.1

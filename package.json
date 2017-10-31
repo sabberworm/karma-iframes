@@ -1,6 +1,6 @@
 {
   "name": "karma-iframes",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Lets you run each test in a separate context, loaded as an iframe.",
   "main": "index.js",
   "files": [
