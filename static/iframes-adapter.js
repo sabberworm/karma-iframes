@@ -53,7 +53,7 @@
 			} else if(message === 'result') {
 				this.result(arg);
 			} else if(message === 'complete') {
-				this.complete();
+				this.complete(arg);
 			} else {
 				// Other message (log, error); send directly to karma
 				karma[message].apply(karma, msg.data.slice(2));
@@ -90,12 +90,12 @@
 		sendResult(result);
 	};
 
-	Suite.prototype.complete = function() {
+	Suite.prototype.complete = function(result) {
 		if(isDebug) {
 			console.debug(`Suite ${this.fileName} has completed with ${this.finished} of ${this.total} tests`);
 		}
 		this.state = 'complete';
-		suiteComplete();
+		suiteComplete(result);
 		this.cleanup();
 	};
 	
@@ -169,7 +169,7 @@
 	}
 
 	// Some suite has completed
-	function suiteComplete() {
+	function suiteComplete(result) {
 		// Have all suites completed?
 		let completedSuites = suitesWithState('complete');
 		if(Object.keys(completedSuites).length < Object.keys(suites).length) {
@@ -180,7 +180,7 @@
 			let [total, finished] = countTests();
 			console.debug(`All ${Object.keys(suites).length} suites have completed, ran ${finished} of ${total} tests`);
 		}
-		karma.complete();
+		karma.complete(result);
 	}
 
 	function start() {
