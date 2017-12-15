@@ -170,6 +170,10 @@
 
 	// Some suite has completed
 	function suiteComplete(result) {
+        if (result.coverage) {
+            coverageCollector.addCoverage(result.coverage);
+        }
+
 		// Have all suites completed?
 		let completedSuites = suitesWithState('complete');
 		if(Object.keys(completedSuites).length < Object.keys(suites).length) {
@@ -180,6 +184,9 @@
 			let [total, finished] = countTests();
 			console.debug(`All ${Object.keys(suites).length} suites have completed, ran ${finished} of ${total} tests`);
 		}
+        if (result.coverage) {
+            result.coverage = coverageCollector.getFinalCoverage();
+        }
 		karma.complete(result);
 	}
 
@@ -193,6 +200,67 @@
 			suite.run();
 		});
 	}
+
+    //
+    // Helper to collect coverages from each suite
+    // (supports only one coverage format)
+    //
+    var coverageCollector = {
+        coverages: [],
+        addCoverage: function (coverage) {
+            this.coverages.push(coverage);
+        },
+
+        getFinalCoverage: function () {
+            var coverages = this.coverages;
+            return coverages.length ? this.mergeCoverages(coverages) : null;
+        },
+
+        mergeCoverages: function (coverages) {
+            var mergedCoverage = {},
+                collector = this;
+
+            coverages.forEach(function (coverageBySrc) {
+                Object.keys(coverageBySrc).forEach(function (srcKey) {
+                    if (!(srcKey in mergedCoverage)) {
+                        mergedCoverage[srcKey] = collector.dirtyClone(coverageBySrc[srcKey]);
+                        return;
+                    }
+
+                    var masterCoverage = mergedCoverage[srcKey],
+                        coverage = coverageBySrc[srcKey];
+
+                    // b - branches,
+                    ['b'].forEach(function (prop) {
+                        if (!coverage[prop]) {
+                            return;
+                        }
+                        Object.keys(coverage[prop]).forEach(function (branch) {
+                            if (!coverage[prop][branch]) {
+                                return;
+                            }
+                            (masterCoverage[prop][branch] || []).forEach(function (value, index) {
+                                masterCoverage[prop][branch][index] += (coverage[prop][branch] || [])[index] || 0;
+                            });
+                        });
+                    });
+
+                    // f - functions, s - statements
+                    ['f', 's'].forEach(function (prop) {
+                        Object.keys(masterCoverage[prop]).forEach(function (index) {
+                            masterCoverage[prop][index] += (coverage[prop] || [])[index] || 0;
+                        });
+                    });
+                });
+            });
+
+            return mergedCoverage;
+        },
+
+        dirtyClone: function (object) {
+            return JSON.parse(JSON.stringify(object));
+        }
+    };
 
 	karma.start = start;
 })(window.__karma__);
