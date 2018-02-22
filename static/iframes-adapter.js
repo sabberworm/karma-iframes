@@ -6,17 +6,19 @@
 	
 	var isDebug = document.location.href.indexOf('debug.html') > -1;
 
-	function Suite(path) {
-		// state is one of
-		// • 'pending' (before the total is known)
-		// • 'started' (after total is known but before all suites have executed)
-		// • 'complete' (when total === finished)
-		this.state = 'pending',
-		this.fileName = path.match(/\/([^/]+)\.iframe\.html$/)[1];
-		this.path = path;
-		this.iframe = document.createElement('iframe');
-		this.total = NaN,
-		this.finished = 0;
+	function Suite(path, showTitle) {
+        // state is one of
+        // • 'pending' (before the total is known)
+        // • 'started' (after total is known but before all suites have executed)
+        // • 'complete' (when total === finished)
+        this.state = 'pending',
+            this.fileName = path.match(/\/([^/]+)\.iframe\.html$/)[1];
+        this.path = path;
+        this.iframe = document.createElement('iframe');
+        this.wrapper = document.createElement('span');
+        this.showTitle = showTitle;
+        this.total = NaN;
+        this.finished = 0;
 	}
 	
 	Suite.prototype.init = function(suites) {
@@ -63,11 +65,16 @@
 	};
 
 	Suite.prototype.run = function() {
-		if(isDebug) {
-			console.debug(`Running suite ${this.fileName}`);
-		}
-		this.iframe.src = this.path;
-		document.body.appendChild(this.iframe);
+        if(isDebug) {
+            console.debug(`Running suite ${this.fileName}`);
+        }
+        if (this.showTitle) {
+            this.wrapper.style.float = 'left';
+            this.wrapper.innerHTML = this.fileName + '<br>';
+        }
+        this.wrapper.appendChild(this.iframe);
+        this.iframe.src = this.path;
+        document.body.appendChild(this.wrapper)
 	};
 
 	Suite.prototype.started = function(total) {
@@ -96,14 +103,19 @@
 		}
 		this.state = 'complete';
 		suiteComplete(result);
+        this.onComplete();
 		this.cleanup();
 	};
+
+    Suite.prototype.onComplete = function() {};
 	
 	Suite.prototype.cleanup = function() {
-		this.iframe.parentNode.removeChild(this.iframe);
-		window.removeEventListener('message', this.messageListener, false);
-		this.iframe = null;
-		this.messageListener = null;
+        this.iframe.parentNode.removeChild(this.iframe);
+        this.wrapper.parentNode.removeChild(this.wrapper);
+        window.removeEventListener('message', this.messageListener, false);
+        this.iframe = null;
+        this.wrapper = null;
+        this.messageListener = null;
 	}
 
 	// Map suite files to suite instances
@@ -190,16 +202,39 @@
 		karma.complete(result);
 	}
 
-	function start() {
-		// jshint validthis: true
-		var files = Object.keys(karma.files).filter(file => file.match(/\.iframe\.html$/));
+    function start () {
+        // jshint validthis: true
+        let files = Object.keys(karma.files).filter(file => file.match(/\.iframe\.html$/));
+        let concurrency = parseInt(karma.config.concurrency, 10) || 10;
+        let showFrameTitle = karma.config.showFrameTitle || false;
+        let ran = 0;
+        let preparedSuites = [];
+        preparedSuites = files.map(file => {
+            let suite = new Suite(file, showFrameTitle);
+            suite.init(suites);
+            return suite;
+        });
 
-		files.forEach(file => {
-			let suite = new Suite(file);
-			suite.init(suites);
-			suite.run();
-		});
-	}
+        preparedSuites.reverse();
+
+        function runNextSuite () {
+            let suite = preparedSuites.pop();
+            if (!suite) {
+                return;
+            }
+            suite.onComplete = function () {
+                ran--;
+                runNextSuite();
+            };
+            suite.run();
+            ran++;
+            if (ran < concurrency) {
+                setTimeout(runNextSuite, 0);
+            }
+        }
+
+        runNextSuite();
+    }
 
     //
     // Helper to collect coverages from each suite
