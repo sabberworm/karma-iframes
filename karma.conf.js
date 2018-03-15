@@ -9,9 +9,9 @@ let PLUGINS = [
 ]
 
 if('KARMA_BROWSER' in process.env) {
-	process.env.KARMA_BROWSER.split(/\s+,\s+/).forEach(browser => {
+	process.env.KARMA_BROWSER.split(/\s*,\s*/).forEach(browser => {
 		BROWSERS.push(browser);
-		PLUGINS.push(`karma-${browser.toLowerCase()}-launcher`);
+		PLUGINS.push(`karma-${browser.replace(/_.*$/, '').toLowerCase()}-launcher`);
 	});
 } else {
 	BROWSERS.push('Firefox', 'Chrome');
@@ -97,6 +97,13 @@ module.exports = function(config) {
 
 		// Concurrency level
 		// how many browser should be started simultaneous
-		concurrency: Infinity
+		concurrency: Infinity,
+
+		customLaunchers: {
+			Chrome_NoSandbox: {
+				base: 'Chrome',
+				flags: ['--no-sandbox']
+			}
+		}
 	})
 }
