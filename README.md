@@ -17,10 +17,10 @@ Also, some older frameworks (Ext, Prototype) might require certain globals to ex
 Sure, as always:
 
 * When focusing on a test (e.g. using Jasmine’s `fit`, or QUnit’s `only`), you’ll only be focusing on this test within the suite/file it belongs, not the whole test set. This might not be what you want.
-* Instrumentation/coverage reports most likely won’t work (or, at the least, won’t be accurate). I have not tested this.
 * Creating a new context incurs some costs, both in the karma server as well as in the client code. You should be able to mitigate this by setting `runInParent` to `true`, to nest the iframes only 1 level deep instead of 2.
 * The plugin messes with some karma internals and might not be compatible with all configurations/plugins.
 * For it to work, all files you want separated have to not depend on each other. You can only include each file either in all iframes or only in one. Slicing arbitrarily is not supported.
+* Code coverage support is not under unit test.
 
 ## How does it work?
 
@@ -87,3 +87,7 @@ of course, you can combine this with other preprocessors:
 ```
 
 In the list of preprocessors for a pattern, I can’t think of a single reason why you’d not want the `'iframes'` preprocessor to be last (unless some other plugin comes along, designed specifically to extend karma-iframes).
+
+## Acknowlegdements
+
+* Thanks to [@thealien](https://github.com/thealien) for code coverage support.
