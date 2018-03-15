@@ -6,12 +6,12 @@ node_js:
   - "8"
   - "6"
 env:
-  - KARMA_VERSION=1.2
   - KARMA_VERSION=1.3
   - KARMA_VERSION=1.4
   - KARMA_VERSION=1.5
   - KARMA_VERSION=1.6
   - KARMA_VERSION=1.7
+  - KARMA_VERSION=2.0
 addons:
   chrome: stable
 before_install:
