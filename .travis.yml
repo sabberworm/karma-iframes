@@ -12,6 +12,8 @@ env:
   - KARMA_VERSION=1.6
   - KARMA_VERSION=1.7
   - KARMA_VERSION=2.0
+  - KARMA_VERSION=3.0
+  - KARMA_VERSION=3.1
 addons:
   chrome: stable
 before_install:
