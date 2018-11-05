@@ -11,8 +11,8 @@
 		// • 'pending' (before the total is known)
 		// • 'started' (after total is known but before all suites have executed)
 		// • 'complete' (when total === finished)
-		this.state = 'pending',
-			this.fileName = path.match(/\/([^/]+)\.iframe\.html$/)[1];
+		this.state = 'pending';
+		this.fileName = path.match(/\/([^/]+)\.iframe\.html$/)[1];
 		this.path = path;
 		this.iframe = document.createElement('iframe');
 		this.wrapper = document.createElement('span');
@@ -205,6 +205,7 @@
 	function start () {
 		// jshint validthis: true
 		let files = Object.keys(karma.files).filter(file => file.match(/\.iframe\.html$/));
+
 		let concurrency = parseInt(karma.config.concurrency, 10) || 10;
 		let showFrameTitle = karma.config.showFrameTitle || false;
 		let ran = 0;
@@ -214,6 +215,19 @@
 			suite.init(suites);
 			return suite;
 		});
+
+		if(isDebug) {
+			let debugLinks = document.createElement('div');
+			preparedSuites.forEach(suite => {
+				let link = document.createElement('a');
+				link.href = suite.path;
+				link.target = '_blank';
+				link.style.display = 'block';
+				link.appendChild(document.createTextNode(suite.fileName));
+				debugLinks.appendChild(link);
+			});
+			document.body.insertBefore(debugLinks, document.body.firstChild);
+		}
 
 		preparedSuites.reverse();
 
