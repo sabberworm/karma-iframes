@@ -7,6 +7,10 @@
 * Support code coverage (thanks to [@thealien](https://github.com/thealien))
 * Fix error in serve-file-middleware that made 404 requests crash the server (noticeable when the browser tried to load source maps).
 
+### 1.2.1
+
+* Output a list of deep-links to individual suites in debug mode.
+
 ## 1.1
 
 ### 1.1.0
