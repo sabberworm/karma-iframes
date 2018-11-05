@@ -7,18 +7,18 @@
 	var isDebug = document.location.href.indexOf('debug.html') > -1;
 
 	function Suite(path, showTitle) {
-        // state is one of
-        // • 'pending' (before the total is known)
-        // • 'started' (after total is known but before all suites have executed)
-        // • 'complete' (when total === finished)
-        this.state = 'pending',
-            this.fileName = path.match(/\/([^/]+)\.iframe\.html$/)[1];
-        this.path = path;
-        this.iframe = document.createElement('iframe');
-        this.wrapper = document.createElement('span');
-        this.showTitle = showTitle;
-        this.total = NaN;
-        this.finished = 0;
+		// state is one of
+		// • 'pending' (before the total is known)
+		// • 'started' (after total is known but before all suites have executed)
+		// • 'complete' (when total === finished)
+		this.state = 'pending',
+			this.fileName = path.match(/\/([^/]+)\.iframe\.html$/)[1];
+		this.path = path;
+		this.iframe = document.createElement('iframe');
+		this.wrapper = document.createElement('span');
+		this.showTitle = showTitle;
+		this.total = NaN;
+		this.finished = 0;
 	}
 	
 	Suite.prototype.init = function(suites) {
@@ -65,16 +65,16 @@
 	};
 
 	Suite.prototype.run = function() {
-        if(isDebug) {
-            console.debug(`Running suite ${this.fileName}`);
-        }
-        if (this.showTitle) {
-            this.wrapper.style.float = 'left';
-            this.wrapper.innerHTML = this.fileName + '<br>';
-        }
-        this.wrapper.appendChild(this.iframe);
-        this.iframe.src = this.path;
-        document.body.appendChild(this.wrapper)
+		if(isDebug) {
+			console.debug(`Running suite ${this.fileName}`);
+		}
+		if (this.showTitle) {
+			this.wrapper.style.float = 'left';
+			this.wrapper.innerHTML = this.fileName + '<br>';
+		}
+		this.wrapper.appendChild(this.iframe);
+		this.iframe.src = this.path;
+		document.body.appendChild(this.wrapper)
 	};
 
 	Suite.prototype.started = function(total) {
@@ -103,19 +103,19 @@
 		}
 		this.state = 'complete';
 		suiteComplete(result);
-        this.onComplete();
+		this.onComplete();
 		this.cleanup();
 	};
 
-    Suite.prototype.onComplete = function() {};
+	Suite.prototype.onComplete = function() {};
 	
 	Suite.prototype.cleanup = function() {
-        this.iframe.parentNode.removeChild(this.iframe);
-        this.wrapper.parentNode.removeChild(this.wrapper);
-        window.removeEventListener('message', this.messageListener, false);
-        this.iframe = null;
-        this.wrapper = null;
-        this.messageListener = null;
+		this.iframe.parentNode.removeChild(this.iframe);
+		this.wrapper.parentNode.removeChild(this.wrapper);
+		window.removeEventListener('message', this.messageListener, false);
+		this.iframe = null;
+		this.wrapper = null;
+		this.messageListener = null;
 	}
 
 	// Map suite files to suite instances
@@ -182,9 +182,9 @@
 
 	// Some suite has completed
 	function suiteComplete(result) {
-        if (result.coverage) {
-            coverageCollector.addCoverage(result.coverage);
-        }
+		if (result.coverage) {
+			coverageCollector.addCoverage(result.coverage);
+		}
 
 		// Have all suites completed?
 		let completedSuites = suitesWithState('complete');
@@ -196,106 +196,106 @@
 			let [total, finished] = countTests();
 			console.debug(`All ${Object.keys(suites).length} suites have completed, ran ${finished} of ${total} tests`);
 		}
-        if (result.coverage) {
-            result.coverage = coverageCollector.getFinalCoverage();
-        }
+		if (result.coverage) {
+			result.coverage = coverageCollector.getFinalCoverage();
+		}
 		karma.complete(result);
 	}
 
-    function start () {
-        // jshint validthis: true
-        let files = Object.keys(karma.files).filter(file => file.match(/\.iframe\.html$/));
-        let concurrency = parseInt(karma.config.concurrency, 10) || 10;
-        let showFrameTitle = karma.config.showFrameTitle || false;
-        let ran = 0;
-        let preparedSuites = [];
-        preparedSuites = files.map(file => {
-            let suite = new Suite(file, showFrameTitle);
-            suite.init(suites);
-            return suite;
-        });
+	function start () {
+		// jshint validthis: true
+		let files = Object.keys(karma.files).filter(file => file.match(/\.iframe\.html$/));
+		let concurrency = parseInt(karma.config.concurrency, 10) || 10;
+		let showFrameTitle = karma.config.showFrameTitle || false;
+		let ran = 0;
+		let preparedSuites = [];
+		preparedSuites = files.map(file => {
+			let suite = new Suite(file, showFrameTitle);
+			suite.init(suites);
+			return suite;
+		});
 
-        preparedSuites.reverse();
+		preparedSuites.reverse();
 
-        function runNextSuite () {
-            let suite = preparedSuites.pop();
-            if (!suite) {
-                return;
-            }
-            suite.onComplete = function () {
-                ran--;
-                runNextSuite();
-            };
-            suite.run();
-            ran++;
-            if (ran < concurrency) {
-                setTimeout(runNextSuite, 0);
-            }
-        }
+		function runNextSuite () {
+			let suite = preparedSuites.pop();
+			if (!suite) {
+				return;
+			}
+			suite.onComplete = function () {
+				ran--;
+				runNextSuite();
+			};
+			suite.run();
+			ran++;
+			if (ran < concurrency) {
+				setTimeout(runNextSuite, 0);
+			}
+		}
 
-        runNextSuite();
-    }
+		runNextSuite();
+	}
 
-    //
-    // Helper to collect coverages from each suite
-    // (supports only one coverage format)
-    //
-    var coverageCollector = {
-        coverages: [],
-        addCoverage: function (coverage) {
-            this.coverages.push(coverage);
-        },
+	//
+	// Helper to collect coverages from each suite
+	// (supports only one coverage format)
+	//
+	var coverageCollector = {
+		coverages: [],
+		addCoverage: function (coverage) {
+			this.coverages.push(coverage);
+		},
 
-        getFinalCoverage: function () {
-            var coverages = this.coverages;
-            return coverages.length ? this.mergeCoverages(coverages) : null;
-        },
+		getFinalCoverage: function () {
+			var coverages = this.coverages;
+			return coverages.length ? this.mergeCoverages(coverages) : null;
+		},
 
-        mergeCoverages: function (coverages) {
-            var mergedCoverage = {},
-                collector = this;
+		mergeCoverages: function (coverages) {
+			var mergedCoverage = {},
+				collector = this;
 
-            coverages.forEach(function (coverageBySrc) {
-                Object.keys(coverageBySrc).forEach(function (srcKey) {
-                    if (!(srcKey in mergedCoverage)) {
-                        mergedCoverage[srcKey] = collector.dirtyClone(coverageBySrc[srcKey]);
-                        return;
-                    }
+			coverages.forEach(function (coverageBySrc) {
+				Object.keys(coverageBySrc).forEach(function (srcKey) {
+					if (!(srcKey in mergedCoverage)) {
+						mergedCoverage[srcKey] = collector.dirtyClone(coverageBySrc[srcKey]);
+						return;
+					}
 
-                    var masterCoverage = mergedCoverage[srcKey],
-                        coverage = coverageBySrc[srcKey];
+					var masterCoverage = mergedCoverage[srcKey],
+						coverage = coverageBySrc[srcKey];
 
-                    // b - branches,
-                    ['b'].forEach(function (prop) {
-                        if (!coverage[prop]) {
-                            return;
-                        }
-                        Object.keys(coverage[prop]).forEach(function (branch) {
-                            if (!coverage[prop][branch]) {
-                                return;
-                            }
-                            (masterCoverage[prop][branch] || []).forEach(function (value, index) {
-                                masterCoverage[prop][branch][index] += (coverage[prop][branch] || [])[index] || 0;
-                            });
-                        });
-                    });
+					// b - branches,
+					['b'].forEach(function (prop) {
+						if (!coverage[prop]) {
+							return;
+						}
+						Object.keys(coverage[prop]).forEach(function (branch) {
+							if (!coverage[prop][branch]) {
+								return;
+							}
+							(masterCoverage[prop][branch] || []).forEach(function (value, index) {
+								masterCoverage[prop][branch][index] += (coverage[prop][branch] || [])[index] || 0;
+							});
+						});
+					});
 
-                    // f - functions, s - statements
-                    ['f', 's'].forEach(function (prop) {
-                        Object.keys(masterCoverage[prop]).forEach(function (index) {
-                            masterCoverage[prop][index] += (coverage[prop] || [])[index] || 0;
-                        });
-                    });
-                });
-            });
+					// f - functions, s - statements
+					['f', 's'].forEach(function (prop) {
+						Object.keys(masterCoverage[prop]).forEach(function (index) {
+							masterCoverage[prop][index] += (coverage[prop] || [])[index] || 0;
+						});
+					});
+				});
+			});
 
-            return mergedCoverage;
-        },
+			return mergedCoverage;
+		},
 
-        dirtyClone: function (object) {
-            return JSON.parse(JSON.stringify(object));
-        }
-    };
+		dirtyClone: function (object) {
+			return JSON.parse(JSON.stringify(object));
+		}
+	};
 
 	karma.start = start;
 })(window.__karma__);
