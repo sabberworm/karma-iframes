@@ -58,7 +58,17 @@
 				this.complete(arg);
 			} else {
 				// Other message (log, error); send directly to karma
-				karma[message].apply(karma, msg.data.slice(2));
+				var args = msg.data.slice(2);
+				for (var i = 0, l = args.length; i < l; ++i) {
+					var arg = args[i];
+					if (typeof arg === 'object' && arg.name && arg.message && arg.stack) {
+						var newError = new Error(arg.message);
+						newError.name = arg.name;
+						newError.stack = arg.stack;
+						args[i] = newError;
+					}
+				}
+				karma[message].apply(karma, args);
 			}
 		};
 		window.addEventListener('message', this.messageListener, false);
