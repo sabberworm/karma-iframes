@@ -23,7 +23,7 @@ window.__karma__ = (function(hasParent) {
 		for (var i = 2, l = args.length; i < l; ++i) {
 			if (args[i] instanceof Error) {
 				args[i] = {
-					['@@_serializedErrorFromIFrame']: true,
+					'@@_serializedErrorFromIFrame': true,
 					name: args[i].name,
 					message: args[i].message,
 					stack: args[i].stack
