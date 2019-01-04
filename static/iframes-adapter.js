@@ -58,16 +58,16 @@
 				this.complete(arg);
 			} else {
 				// Other message (log, error); send directly to karma
-				var args = msg.data.slice(2);
-				for (var i = 0, l = args.length; i < l; ++i) {
-					var arg = args[i];
-					if (typeof arg === 'object' && arg.name && arg.message && arg.stack) {
-						var newError = new Error(arg.message);
-						newError.name = arg.name;
-						newError.stack = arg.stack;
-						args[i] = newError;
-					}
-				}
+				var args = msg.data.slice(2)
+					.map(arg => {
+						if (typeof arg === 'object' && '@@_serializedErrorFromIFrame' in arg) {
+							var newError = new Error(arg.message);
+							newError.name = arg.name;
+							newError.stack = arg.stack;
+							return newError;
+						}
+						return arg;
+					});
 				karma[message].apply(karma, args);
 			}
 		};
