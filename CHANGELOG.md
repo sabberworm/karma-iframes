@@ -11,6 +11,10 @@
 
 * Output a list of deep-links to individual suites in debug mode.
 
+### 1.2.2
+
+* Serialize error objects so they can be passed to the parent context.
+
 ## 1.1
 
 ### 1.1.0
