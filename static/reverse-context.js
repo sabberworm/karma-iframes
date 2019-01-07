@@ -15,7 +15,7 @@ window.__karma__ = (function(hasParent) {
 
 	var karma = {
 		start: UNIMPLEMENTED_START,
-		setupContext
+		setupContext: setupContext
 	};
 
 	function callParentKarmaMethod(methodName, args) {
