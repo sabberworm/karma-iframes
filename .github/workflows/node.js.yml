@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
-        karma-version: [5.x, 6.x]
+        node-version: [6.x, 8.x, 10.x, 12.x, 14.x]
+        karma-version: [1.3.x, 1.4.x, 1.5.x, 1.6.x, 1.7.x, 2.0.x, 3.0.x, 3.1.x, 4.4.x, 5.x, 6.x]
     steps:
       - uses: actions/checkout@v2
       - name: Build on Node.js ${{ matrix.node-version }}
