@@ -1,4 +1,4 @@
-# What is `karma-iframes`? [![CI status](https://api.travis-ci.org/sabberworm/karma-iframes.svg?branch=master)](https://travis-ci.org/sabberworm/karma-iframes)
+# What is `karma-iframes`? [![CI status](https://github.com/sabberworm/karma-iframes/workflows/Node.js%20CI/badge.svg)](https://github.com/sabberworm/karma-iframes/actions)
 
 It’s a Karma plugin that lets you run each test in a separate context, loaded as an iframe.
 
