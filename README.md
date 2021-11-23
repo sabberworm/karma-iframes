@@ -60,7 +60,7 @@ To use it, add it as a framework:
 	[…]
 ```
 
-Most likely you’ll want to list `'karma-iframes'` as the last item in `frameworks`.
+Most likely you’ll want to list `'iframes'` as the last item in `frameworks`.
 Any file included by a later framework will be included into the test runner context but not the iframe context. This might be needed in some cases, e.g. for frameworks that extend the way the karma client talks to the server, but it’s not the common case.
 
 Lastly, mark the files you want separated with the `iframes` preprocessor:
